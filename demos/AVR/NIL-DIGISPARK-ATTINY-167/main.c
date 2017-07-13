@@ -1,5 +1,5 @@
 /*
-    CihibiOS - Copyright (C) 2006..2016 Giovanni Di Sirio
+    ChibiOS - Copyright (C) 2016..2017 Theodore Ateba
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
@@ -17,6 +17,18 @@
 #include "hal.h"
 #include "ch.h"
 
+/*
+ * UART 1 configuration structure.
+ */
+const UARTConfig uartConf = {
+  NULL,   /* UART transmission buffer callback.           */
+  NULL,   /* UART physical end of transmission callback.  */
+  NULL,   /* UART Receiver receiver filled callback.      */
+  NULL,   /* UART caracter received callback.             */
+  NULL,   /* UART received error callback.                */
+  38400,  /* UART baudrate.                               */
+};
+
 THD_WORKING_AREA(waThread1, 32);
 THD_FUNCTION(Thread1, arg) {
 
@@ -24,6 +36,7 @@ THD_FUNCTION(Thread1, arg) {
 
   while (true) {
     palTogglePad(IOPORT2, PORTB_LED1);
+    uartStartSend(&UARTD1, 30, (const void *) "ChibiOS PORT on ATtiny-167!.\n\r");
     chThdSleepMilliseconds(1000);
   }
 }
@@ -50,6 +63,21 @@ int main(void) {
    */
   halInit();
   chSysInit();
+
+  /*
+   * Initialize the UART interface.
+   */
+   uartInit();
+
+  /*
+   * Start the Uart 1 interface.
+   */
+  uartStart(&UARTD1, &uartConf);
+
+  /*
+   * Send an message via the UART 1 interface.
+   */
+  uartStartSend(&UARTD1, 15, (const void *) "Hello world!.\n\r");
 
   /*
    * This is now the idle thread loop, you may perform here a low priority

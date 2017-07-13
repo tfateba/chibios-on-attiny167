@@ -92,7 +92,7 @@
 /*
  * UART driver system settings.
  */
-#define AVR_UART_USE_USART1               FALSE
+#define AVR_UART_USE_USART1               TRUE
 #define AVR_UART_USE_USART2               FALSE
 
 /*

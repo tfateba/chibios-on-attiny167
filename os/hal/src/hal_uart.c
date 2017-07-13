@@ -55,10 +55,7 @@
  */
 void uartInit(void) {
 
-  // TODO: This function is undefine find why,
-  // it must be include by hal_uart_lld.c.
-  #warning "This function is undefine, find why."
-  //uart_lld_init();
+  uart_lld_init();
 }
 
 /**
